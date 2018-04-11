@@ -2,9 +2,7 @@ package fileop
 
 import (
 	"io/ioutil"
-	"path"
 	"bufio"
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -36,10 +34,10 @@ func GetDirFiles(dir string, files *[]string) error {
 			continue
 		}
 
-		if path.Ext(info.Name()) == ".log" {
+		//if path.Ext(info.Name()) == ".log" {
 			s := filepath.Join(dir, info.Name())
 			*files = append(*files, s)
-		}
+		//}
 	}
 
 	return nil
@@ -56,14 +54,14 @@ func ReadLine(fileName string, handler func(string)) error {
 	for {
 		line, err := buf.ReadString('\n')
 		line = strings.TrimSpace(line)
-		handler(line)
 		if err != nil {
 			if err == io.EOF {
 				return nil
 			}
-
 			return err
 		}
+
+		handler(line)
 	}
 
 	return nil

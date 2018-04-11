@@ -3,7 +3,7 @@ package clips
 import (
 	"os"
 	"fmt"
-	"logclips/fileop"
+	"github.com/jnscode/logclips/fileop"
 	"path/filepath"
 	"time"
 )
@@ -63,7 +63,13 @@ func ClipLog(dirSrc, dirDst string, tmb time.Time) bool {
 			continue
 		}
 
+		if len(lines) == 0 {
+			continue
+		}
+
+		var hasLog bool
 		var lines2 []string
+
 		for i, line := range lines {
 			hasTime, tmStr := GetLogTime(line)
 			if !hasTime {
@@ -75,10 +81,16 @@ func ClipLog(dirSrc, dirDst string, tmb time.Time) bool {
 				continue
 			}
 
+			hasLog = true
+
 			if tm.After(tmb) {
 				lines2 = lines[i:]
 				break
 			}
+		}
+
+		if !hasLog && len(lines2) == 0 {
+			lines2 = lines
 		}
 
 		if len(lines2) == 0 {
